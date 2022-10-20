@@ -16,16 +16,31 @@ import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
 const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
+  {
+    title: 'Technology', url: '#', child: [
+      { title: 'Culture', url: '#' },
+      { title: 'Business', url: '#' },
+      { title: 'Science', url: '#' },
+      { title: 'Health', url: '#' },
+      { title: 'Style', url: '#' },
+    ]
+  },
+  {
+    title: 'aaaa', url: '#', child: [
+      { title: 'Culture', url: '#' },
+      { title: 'Business', url: '#' },
+      { title: 'Politics', url: '#' },
+      { title: 'Style', url: '#' },
+    ]
+  },
+  {
+    title: 'Business', url: '#', child: [
+      { title: 'Culture', url: '#' },
+      { title: 'Science', url: '#' },
+      { title: 'Health', url: '#' },
+      { title: 'Style', url: '#' },
+    ]
+  },
 ];
 
 const mainFeaturedPost = {
@@ -129,7 +144,12 @@ const sidebar = {
   ],
 };
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // primary: blue,
+    mode: "light"
+  },
+});
 
 export default function Blog() {
   return (

@@ -4,12 +4,17 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+
+import styles from '../styles/Header.module.css'
 
 interface HeaderProps {
   sections: ReadonlyArray<{
     title: string;
     url: string;
+    child: ReadonlyArray<{
+      title: string;
+      url: string;
+    }>
   }>;
   title: string;
 }
@@ -38,24 +43,20 @@ export default function Header(props: HeaderProps) {
           Sign up
         </Button>
       </Toolbar>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
-      >
-        {sections.map((section) => (
-          <Link
-            color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
-          >
-            {section.title}
-          </Link>
-        ))}
-      </Toolbar>
+      <nav className={styles.headermenu}>
+        <ul>
+          {sections.map((section) => (
+            <li key={section.title}>
+              <a color="inherit" href={section.url}> {section.title}</a>
+              <ul>
+                {section.child.map((c) => (
+                  <li><a color="inherit" href={c.url}> {c.title}</a></li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </React.Fragment>
   );
 }
