@@ -147,7 +147,7 @@ const sidebar = {
 const theme = createTheme({
   palette: {
     // primary: blue,
-    mode: "light"
+    mode: "dark"
   },
 });
 
@@ -155,7 +155,7 @@ export default function Blog() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Header title="Blog" sections={sections} />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
