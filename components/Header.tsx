@@ -6,28 +6,11 @@ import Typography from '@mui/material/Typography';
 
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import DirectionsIcon from '@mui/icons-material/Directions';
-
 import styles from '../styles/Header.module.css'
+import {sections, blog_title} from '../lib/params';
 
-interface HeaderProps {
-  sections: ReadonlyArray<{
-    title: string;
-    url: string;
-    child: ReadonlyArray<{
-      title: string;
-      url: string;
-    }>
-  }>;
-  title: string;
-}
-
-export default function Header(props: HeaderProps) {
-  const { sections, title } = props;
-
+export default function Header() {
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -40,7 +23,7 @@ export default function Header(props: HeaderProps) {
           noWrap
           sx={{ flex: 1, ml:"300px" }}
         >
-          {title}
+          {blog_title}
         </Typography>
 
         <Paper
