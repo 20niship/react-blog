@@ -5,33 +5,30 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import Chip from '@mui/material/Chip';
+import InfoIcon from '@mui/icons-material/Info';
+import UpdateIcon from '@mui/icons-material/Update';
+import { Page } from '../lib/global'
 
 interface FeaturedPostProps {
-  post: {
-    date: string;
-    description: string;
-    image: string;
-    imageLabel: string;
-    title: string;
-  };
+  page: Page;
 }
 
 export default function FeaturedPost(props: FeaturedPostProps) {
-  const { post } = props;
-
+  const { page } = props;
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
+      <CardActionArea component="a" href={"/view/" + page.id}>
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
-              {post.title}
+              {page.title}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              {post.date}
-            </Typography>
+            
+          <Chip icon={<InfoIcon />} label={page.update} />
+          <Chip icon={<UpdateIcon />} label={page.create} />
             <Typography variant="subtitle1" paragraph>
-              {post.description}
+              {page.context.slice(0, 100)} .......
             </Typography>
             <Typography variant="subtitle1" color="primary">
               Continue reading...
@@ -40,8 +37,8 @@ export default function FeaturedPost(props: FeaturedPostProps) {
           <CardMedia
             component="img"
             sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={post.image}
-            alt={post.imageLabel}
+            image={page.icon}
+            alt={page.title}
           />
         </Card>
       </CardActionArea>

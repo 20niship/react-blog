@@ -1,47 +1,94 @@
-import * as mongoDB from "mongodb";
-import { Page, User, Usergroup } from "./global"
+import { Db, MongoClient, Collection } from "mongodb";
+import { Page, User, Usergroup } from "../global"
 
-const mongo_pagename = "mongo";
-const mongo_pass = "mongoPass";
-const authMechanism = "DEFAULT";
-
-const url = `mongodb://${mongo_pagename}:${mongo_pass}@localhost:27017/?authMechanism=${authMechanism}`;
-
-const client = new mongoDB.MongoClient(url);
-
+let cachedClient: MongoClient;
+let cachedDb: Db;
 export const collections: {
-  pages?: mongoDB.Collection,
-  users?: mongoDB.Collection,
-  usergroups?: mongoDB.Collection,
-  media?: mongoDB.Collection
+  pages?: Collection,
+  users?: Collection,
+  usergroups?: Collection,
+  media?: Collection
 } = {}
 
-export const connect = async () => {
-  console.log("Connecting to mongodb.....")
+export async function connect() {
+  if (cachedClient && cachedDb) {
+    return {
+      client: cachedClient,
+      collections,
+      db: cachedDb,
+    };
+  }
+
+  const mongo_pagename = "mongo";
+  const mongo_pass = "mongoPass";
+  const authMechanism = "DEFAULT";
+  const url = `mongodb://${mongo_pagename}:${mongo_pass}@localhost:27017/?authMechanism=${authMechanism}`;
+  const db_name = "example";
+
+  const client = new MongoClient(url);
   await client.connect();
-  const db = client.db("example");
+  const db = client.db(db_name);
+
+  cachedClient = client;
+  cachedDb = db;
   collections.pages = db.collection("page");
   collections.users = db.collection("users");
   collections.usergroups = db.collection("usergroups");
   collections.media = db.collection("media");
-  console.log("Connected!")
+  return {
+    client: cachedClient,
+    db: cachedDb,
+    collections,
+  };
 }
-
 
 /* ----------------   Page Functions ----------------------  */
+export const FormatDate = (dt: Date) => {
+  try {
+    var y = dt.getFullYear();
+    var m = ('00' + (dt.getMonth() + 1)).slice(-2);
+    var d = ('00' + dt.getDate()).slice(-2);
+    return (y + '-' + m + '-' + d);
+  } catch {
+    console.error("Unknown datetime -->", dt)
+    return "0000-00-00"
+  }
+}
+
+export const page2json = (page: Page) => {
+  page._id = "";
+  page.update = FormatDate(page.update);
+  page.create = FormatDate(page.create);
+  return page;
+}
+
+export const pages2json = (pages: Page[]) => {
+  return pages.map(p => {
+    p._id = "";
+    p.update = FormatDate(p.update);
+    p.create = FormatDate(p.create);
+    return p;
+  })
+}
 
 export const page_list = async (page: number, limit: number) => {
-  return await collections.pages?.find({}).skip(page * limit).limit(limit).toArray();
+  const p = await collections.pages?.find<Page>({}).skip(page * limit).limit(limit).toArray();
+  if (p == undefined) return [];
+  return pages2json(p);
 }
 
-export const get_page_by_id = async (_id: number) => {
-  return await collections.pages?.find({ _id }).toArray();
+export const get_page_by_id = async (id: number): (Page | null) => {
+  const p = await collections.pages?.find<Page>({ id }).toArray();
+  console.log(p, id);
+  if (p == undefined || p.length < 1) return null;
+  return page2json(p[0]);
 }
 export const get_page_by_title = async (title: string) => {
-  return await collections.pages?.find({ title }).toArray();
+  const p = await collections.pages?.find<Page>({ title }).toArray();
+  return pages2json(p);
 }
 
-export const insert_ppage = async (page: Page) => {
+export const insert_page = async (page: Page) => {
   const res = await collections.pages?.insertOne(page as any)
   return res?.acknowledged || false;
 }

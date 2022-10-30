@@ -1,7 +1,6 @@
 import fs from 'fs';
-import process from 'node:process';
-import * as db from "./backend/mongo"
-import { Page, User, Usergroup } from "./backend/global"
+import * as db from "./lib/utils/mongo"
+import { Page, User, Usergroup } from "./lib/global"
 
 process.on('uncaughtException', function(err) {
   // console.log(JSON.stringify(err, null, 4)); // (Optional) beautiful indented output.
@@ -10,7 +9,7 @@ process.on('uncaughtException', function(err) {
 
 const sleep = (msec: number) => new Promise(resolve => setTimeout(resolve, msec));
 
-const json_file = "../nodejs/hatena_to_markdown_js/output.json";
+const json_file = "~/Download/output.json";
 
 const insert_pages = async () => {
   console.log("---------     insert items start -------------------")
@@ -63,8 +62,8 @@ const main = async () => {
   await db.delete_all_pages();
   await db.delete_all_users();
   await db.delete_all_usergroups();
-  // await insert_pages();
-  // await insert_example_users();
+  await insert_pages();
+  await insert_example_users();
   console.log("End!");
 }
 
