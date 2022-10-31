@@ -1,63 +1,41 @@
-import * as React from 'react';
-import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import Chip from '@mui/material/Chip';
-import TagIcon from '@mui/icons-material/Tag';
-import Avatar from '@mui/material/Avatar';
 import { useEffect, useState } from 'react';
-
-import Button from '@mui/material/Button';
-import EmailIcon from '@mui/icons-material/Email';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-
+import { useRouter } from 'next/router'
+import Typography from '@mui/material/Typography';
+import { Page } from "../lib/global"
 import Slideshow from '../components/Slideshow'
+import About from './sidebar/about';
+import MonthlyArchive from './sidebar/MonthlyArchive';
+import SmallList from './sidebar/SmallList';
+import Tags from './sidebar/Tags';
+
+const method = "POST";
+const headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
 
 export default function Sidebar() {
-  const social = [
-    { name: 'GitHub', icon: GitHubIcon },
-    { name: 'Twitter', icon: TwitterIcon },
-    { name: 'Facebook', icon: FacebookIcon },
-  ];
+  const router = useRouter();
 
-  const [tags, setTags] = useState([]);
-  const [archives, setArchives] = useState([]);
+  const [latest, setLatest] = useState<Page[]>([]);
+  const [favorites, setFavorites] = useState<Page[]>([]);
 
-  const setup_tags = async () => {
-    const r = await fetch("/api/all_tags", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
-    if (!r.ok) return;
-    const js = await r.json();
-    setTags(js.tags)
+  const setup = async () => {
+    {
+      const r = await fetch("/api/search", { method, headers, body: JSON.stringify({ is_short: true, sort: "latest" }) });
+      if (!r.ok) return;
+      const js = await r.json();
+      setLatest(js.pages)
+    }
+    {
+      const r = await fetch("/api/search", { method, headers, body: JSON.stringify({ is_short: true, sort: "lgbt" }) });
+      if (!r.ok) return;
+      const js = await r.json();
+      setLatest(js.pages)
+    }
   }
-
-  const setup_archives = async () => {
-    const r = await fetch("/api/archives", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
-    if (!r.ok) return;
-    const js = await r.json();
-    setArchives(js.stats);
-  }
-
-  useEffect(() => {
-    setup_tags();
-    setup_archives();
-  }, []);
+  useEffect(() => { setup(); }, []);
 
   const images = [
     "https://i.imgur.com/CzXTtJV.jpg",
@@ -68,50 +46,21 @@ export default function Sidebar() {
   return (
     <>
       <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1, mb: 2 }}>
-        <Typography variant="h5" gutterBottom>Blog Title</Typography>
-        <Typography variant="caption" display="block" gutterBottom>
-          とあるエンジニアのブログです。 #C++ #ROS #MATLAB #Python #Vim #Robotics #AutonomousDriving #ModelPredictiveControl #julialan
-        </Typography>
-
-        <Avatar alt="Remy Sharp" src="https://i.imgur.com/CzXTtJV.jpg" />
-
-        <Button variant="outlined" size="small" startIcon={<EmailIcon />}>Contact</Button>
-        <Button variant="outlined" size="small" startIcon={<EmailIcon />}>About</Button>
-        {social.map((network) => (
-          <Link
-            display="block"
-            variant="body1"
-            href="#"
-            key={network.name}
-            sx={{ mb: 0.5 }}
-          >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <network.icon />
-              <span>{network.name}</span>
-            </Stack>
-          </Link>
-        ))}
+        <About />
       </Paper>
       <Slideshow sec={5000} images={images} />
 
       <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
-        <Typography variant="h6" gutterBottom>Archives</Typography>
-        <List>
-          {
-            archives.map(archive => {
-              return <ListItemText><Link href={"/search?d=" + archive.month} key={archive.month} >{archive.month + " : " + archive.count + " posts"}</Link></ListItemText>
-            })
-          }
-        </List>
+        <MonthlyArchive />
       </Paper>
 
       <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
-        <Typography variant="h6" gutterBottom>Category</Typography>
-        {
-          tags.map(tag => {
-            return <Chip icon={<TagIcon />} label={tag} key={tag} size="small" />
-          })
-        }
+        <Tags />
+      </Paper>
+
+      <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
+        <Typography variant="h6" gutterBottom>Latests</Typography>
+        <SmallList pages={latest} />
       </Paper>
 
       <Paper elevation={3} >

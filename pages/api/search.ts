@@ -1,40 +1,47 @@
-import * as mongo from "../../backend/mongo";
-import { User, Page, Usergroup } from "../../backend/global"
-import { useBody, useQuery } from 'h3'
+import { Page } from "../../lib/global"
+import { connect, get_latest_small, get_favorites_small } from "../../lib/utils/mongo"
 
 const clamp = (x: number, min: number, max: number) => { return Math.max(Math.min(x, max), min); }
 
-export default async (req, res) => {
-  const query = (req.method === 'GET') ? useQuery(req) : await useBody(req);
-  switch (req.method) {
-    case 'GET':
-      {
-        let page = clamp(query?.page || 0, 0, 99999);
-        let limit = clamp(query?.limit || 20, 5, 50);
-        let search_type = query?.type || "latest";
-        console.log(page, limit, search_type)
-        switch (search_type) {
-          case 'latest':
-            return await mongo.page_list(page, limit);
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-          default:
-            console.error("not defined search_type", search_type)
-            return { err: "Not defined search_type" }
-        }
-      }
+type Data = {
+  page: number,
+  n: number,
+  is_short: boolean,
+  name: string,
+  q: string,
+  d: string,
+  t: string
+}
 
-    case 'POST':
-      {
-        const type = query?.type || "";
-        switch(type){
-          case 'count':
-            return await mongo.count_pages();
-        }
-      }
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+  const query = req.method === "GET" ? req.query : req.body;
+  // q = query string
+  // t = tags
+  // d = date( crreated )
+  let { page, n, is_short, sort, q, t, d } = query;
+  page = clamp(page, 0, 99999);
+  n = clamp(n, 5, 50);
 
-    default:
-      console.error("Error: method not defined --> ", req.method)
-      return { error: "Not defined method!!" }
+  if (req.method !== "GET" && req.method !== "POST") {
+    res.status(500).json({ pages: [], err: "Method not allowed!" })
+    return;
+  }
+  await connect();
+  if (is_short) {
+    n = 7;
+    let pages: Page[] = [];
+    switch (sort) {
+      case "lgbt":
+        pages = await get_favorites_small(page, n);
+        break;
+      case "latest":
+      default:
+        pages = await get_latest_small(page, n);
+    }
+    res.status(200).json({ pages, err: {} });
+    return;
   }
 }
 

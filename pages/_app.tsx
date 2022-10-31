@@ -25,10 +25,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Container maxWidth="xl">
         <Header />
         <Grid container spacing={2} sx={{ maxWidth: 'xl' }}>
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <Component {...pageProps} />
           </Grid>
-          <Grid item xs={2} className={styles.pc_only}>
+          <Grid item xs={3} className={styles.pc_only}>
             <Sidebar/>
           </Grid>
         </Grid>

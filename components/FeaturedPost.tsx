@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import TagIcon from '@mui/icons-material/Tag';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
@@ -8,6 +8,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
 import InfoIcon from '@mui/icons-material/Info';
 import UpdateIcon from '@mui/icons-material/Update';
+import { useRouter } from 'next/router'
+
 import { Page } from '../lib/global'
 
 interface FeaturedPostProps {
@@ -16,27 +18,31 @@ interface FeaturedPostProps {
 
 export default function FeaturedPost(props: FeaturedPostProps) {
   const { page } = props;
+  const router = useRouter();
   return (
     <CardActionArea component="a" href={"/view/" + page.id} variant="outlined">
-      <Card sx={{ display: 'flex' }} >
+      <Card sx={{ display: 'flex', m: 2, height: 170 }} elevation={5}>
+        <CardMedia
+          component="img"
+          sx={{ width: 140, display: { xs: 'none', sm: 'block' } }}
+          image={page.icon}
+          alt={page.title}
+        />
         <CardContent sx={{ flex: 1 }}>
           <Typography component="h2" variant="h5">{page.title}</Typography>
           <Chip icon={<InfoIcon />} label={page.update} />
           <Chip icon={<UpdateIcon />} label={page.create} />
-          <Typography variant="subtitle1" paragraph>
-            {page.context.slice(0, 100)} .......
-          </Typography>
-          <Typography variant="subtitle1" color="primary">
-            Continue reading...
+          {
+            page.tags.map(tag => {
+              return <Chip icon={<TagIcon />} label={tag} key={tag} onClick={() => { router.push("/search?t=" + tag); }} size="small" />
+            })
+          }
+          <Typography variant="subtitle1" paragraph color="gray">
+            {page.context.slice(0, 300)} .......
           </Typography>
         </CardContent>
-        <CardMedia
-          component="img"
-          sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-          image={page.icon}
-          alt={page.title}
-        />
       </Card>
     </CardActionArea>
   );
 }
+

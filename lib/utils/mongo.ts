@@ -72,8 +72,23 @@ export const pages2json = (pages: Page[]) => {
   })
 }
 
+// get latest posts
 export const page_list = async (page: number, limit: number) => {
-  const p = await collections.pages?.find<Page>({}).skip(page * limit).limit(limit).toArray();
+  const p = await collections.pages?.find<Page>({ published: true }).sort({ update: -1 }).skip(page * limit).limit(limit).toArray();
+  if (p == undefined) return [];
+  return pages2json(p);
+}
+
+// get latest posts
+const small_fields = { title: 1, user: 1, tags: 1, lgbt: 1, create: 1, update: 1, published: 1, icon:1 , id:1}
+export const get_latest_small = async (page: number, limit: number) => {
+  const p = await collections.pages?.find({ published: true }).sort({ update: -1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
+  if (p == undefined) return [];
+  return pages2json(p);
+}
+
+export const get_favorites_small = async (page: number, limit: number) => {
+  const p = await collections.pages?.find({ published: true }).sort({ lgbt: 1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
   if (p == undefined) return [];
   return pages2json(p);
 }
@@ -82,10 +97,6 @@ export const get_page_by_id = async (id: number): (Page | null) => {
   const p = await collections.pages?.findOne<Page>({ id: NumberInt(id) });
   if (p == undefined || p == null) return null;
   return page2json(p);
-}
-export const get_page_by_title = async (title: string) => {
-  const p = await collections.pages?.find<Page>({ title }).toArray();
-  return pages2json(p);
 }
 
 export const insert_page = async (page: Page) => {
@@ -115,7 +126,7 @@ export const page_month_stats = async () => {
     { $match: {} },
     { $group: { _id: { $dateToString: { date: "$create", format: "%Y-%m" } }, count: { $sum: 1 } } }
   ];
-  const res= await collections.pages?.aggregate(pipeline).toArray();
+  const res = await collections.pages?.aggregate(pipeline).toArray();
   return res.map(x => { return { month: x._id, count: x.count } })
 }
 

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 
-import styles from '../styles/Slideshow.module.scss'
+import styles from '../styles/Slideshow.module.css'
 import Card from '@mui/material/Card';
-import Slide from '@mui/material/Slide';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 type Props = {

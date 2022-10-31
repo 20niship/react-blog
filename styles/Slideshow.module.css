@@ -1,0 +1,28 @@
+.showcase{
+  height:280px;
+  position:relative;
+}
+
+.showcase > * {
+  top:0;
+  left:0;
+  position:absolute;
+}
+
+.showcase .fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+.showcase .fade-enter-active {
+  transition: opacity 1s ease 1s;
+  opacity: 1;
+}
+.showcase .fade-exit {
+  opacity: 1;
+  z-index: 0;
+}
+.showcase .fade-exit-active {
+  transition: opacity 1s ease 2s;
+  opacity: 0;
+}
+
