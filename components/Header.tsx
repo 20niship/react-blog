@@ -15,32 +15,24 @@ export default function Header() {
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Button size="small">Subscribe</Button>
+        <Button variant="outlined" size="small" href="/user/login">Login</Button>
         <Typography
-          component="h2"
+          component="h1"
           variant="h5"
           color="inherit"
           align="center"
-          noWrap
-          sx={{ flex: 1, ml: "300px" }}
+          sx={{ flex: 1, ml:"200px"}}
         >
           <Link href="/">{blog_title}</Link>
         </Typography>
 
         <Paper
           component="form"
-          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 300 }}
+          sx={{display: 'flex', alignItems: 'center', width: 300 }}
         >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Google Maps"
-          />
-          <IconButton type="button" sx={{ p: '10px' }} aria-label="search"><SearchIcon /></IconButton>
+          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search"/>
+          <IconButton type="button" sx={{ p: '8px' }} aria-label="search"><SearchIcon /></IconButton>
         </Paper>
-
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
       </Toolbar>
       <nav className={styles.headermenu}>
         <ul>

@@ -113,12 +113,10 @@ export const count_pages = async () => {
 export const page_month_stats = async () => {
   const pipeline = [
     { $match: {} },
-    { $group: { _id: { $dateToString: { date: "$created", format: "%Y-%m" } }, count: { $sum: 1 } } }
+    { $group: { _id: { $dateToString: { date: "$create", format: "%Y-%m" } }, count: { $sum: 1 } } }
   ];
-  const aggCursor = collections.pages?.aggregate(pipeline);
-  let res = [];
-  for await (const doc of aggCursor || []) res.push(doc);
-  return res;
+  const res= await collections.pages?.aggregate(pipeline).toArray();
+  return res.map(x => { return { month: x._id, count: x.count } })
 }
 
 export const get_all_tags = async () => {

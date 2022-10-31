@@ -1,0 +1,32 @@
+.showcase{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  > * {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+
+  :global{
+    .fade-enter {
+      opacity: 0;
+      z-index: 1;
+    }
+    .fade-enter-active {
+      transition: opacity 1s ease 1s;
+      opacity: 1;
+    }
+    .fade-exit {
+      opacity: 1;
+      z-index: 0;
+    }
+    .fade-exit-active {
+      transition: opacity 1s ease 2s;
+      opacity: 0;
+    }
+  }
+}
+
