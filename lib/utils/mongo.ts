@@ -1,4 +1,5 @@
-import { Db, MongoClient, Collection } from "mongodb";
+import { Db, MongoClient, Collection, Int32 } from "mongodb";
+const NumberInt = Int32;
 import { Page, User, Usergroup } from "../global"
 
 let cachedClient: MongoClient;
@@ -78,10 +79,9 @@ export const page_list = async (page: number, limit: number) => {
 }
 
 export const get_page_by_id = async (id: number): (Page | null) => {
-  const p = await collections.pages?.find<Page>({ id }).toArray();
-  console.log(p, id);
-  if (p == undefined || p.length < 1) return null;
-  return page2json(p[0]);
+  const p = await collections.pages?.findOne<Page>({ id: NumberInt(id) });
+  if (p == undefined || p == null) return null;
+  return page2json(p);
 }
 export const get_page_by_title = async (title: string) => {
   const p = await collections.pages?.find<Page>({ title }).toArray();
@@ -119,6 +119,15 @@ export const page_month_stats = async () => {
   let res = [];
   for await (const doc of aggCursor || []) res.push(doc);
   return res;
+}
+
+export const get_all_tags = async () => {
+  const pipeline = [
+    { $match: {} },
+    { $group: { _id: "$tags", count: { $sum: 1 } } }
+  ];
+  const tags = await collections.pages?.aggregate(pipeline).toArray();
+  return tags.map(x => { return { name: x._id[0], count: x.count } })
 }
 
 /* ----------------   User Functions ----------------------  */

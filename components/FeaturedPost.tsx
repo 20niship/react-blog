@@ -17,31 +17,26 @@ interface FeaturedPostProps {
 export default function FeaturedPost(props: FeaturedPostProps) {
   const { page } = props;
   return (
-    <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href={"/view/" + page.id}>
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              {page.title}
-            </Typography>
-            
+    <CardActionArea component="a" href={"/view/" + page.id} variant="outlined">
+      <Card sx={{ display: 'flex' }} >
+        <CardContent sx={{ flex: 1 }}>
+          <Typography component="h2" variant="h5">{page.title}</Typography>
           <Chip icon={<InfoIcon />} label={page.update} />
           <Chip icon={<UpdateIcon />} label={page.create} />
-            <Typography variant="subtitle1" paragraph>
-              {page.context.slice(0, 100)} .......
-            </Typography>
-            <Typography variant="subtitle1" color="primary">
-              Continue reading...
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={page.icon}
-            alt={page.title}
-          />
-        </Card>
-      </CardActionArea>
-    </Grid>
+          <Typography variant="subtitle1" paragraph>
+            {page.context.slice(0, 100)} .......
+          </Typography>
+          <Typography variant="subtitle1" color="primary">
+            Continue reading...
+          </Typography>
+        </CardContent>
+        <CardMedia
+          component="img"
+          sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+          image={page.icon}
+          alt={page.title}
+        />
+      </Card>
+    </CardActionArea>
   );
 }

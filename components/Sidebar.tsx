@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { useEffect, useState } from 'react';
 
 interface SidebarProps {
   archives: ReadonlyArray<{
@@ -21,8 +21,25 @@ interface SidebarProps {
 export default function Sidebar(props: SidebarProps) {
   const { archives, description, social, title } = props;
 
+  const [tags, setTags] = useState([]);
+  useEffect(async () => {
+    {
+      const r = await fetch("/api/all_tags", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      });
+      if(!r.ok) return;
+      const js = await r.json();
+      console.log(js.tags);
+      setTags(js.tags)
+    }
+  }, []);
+
   return (
-    <Grid item xs={12} md={4}>
+    <>
       <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.200' }}>
         <Typography variant="h6" gutterBottom>
           {title}
@@ -54,6 +71,6 @@ export default function Sidebar(props: SidebarProps) {
           </Stack>
         </Link>
       ))}
-    </Grid>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import List from '@mui/material/List'
 import styles from '../styles/Home.module.css'
 import { connect, page_list } from '../lib/utils/mongo'
 import FeaturedPost from '../components/FeaturedPost';
@@ -18,11 +19,11 @@ type Props = {
 
 export default function Home(props: Props) {
   return (
-    <div className={styles.container}>
+    <List className={styles.container} dense={false}>
       {props.pages.map((page) => (
         <FeaturedPost key={page.title} page={page} />
       ))}
-    </div>
+    </List>
   )
 }
 

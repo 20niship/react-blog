@@ -8,7 +8,8 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import styles from '../styles/Header.module.css'
-import {sections, blog_title} from '../lib/params';
+import { sections, blog_title } from '../lib/params';
+import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -21,9 +22,9 @@ export default function Header() {
           color="inherit"
           align="center"
           noWrap
-          sx={{ flex: 1, ml:"300px" }}
+          sx={{ flex: 1, ml: "300px" }}
         >
-          {blog_title}
+          <Link href="/">{blog_title}</Link>
         </Typography>
 
         <Paper
