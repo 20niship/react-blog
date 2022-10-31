@@ -7,8 +7,11 @@ import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import Chip from '@mui/material/Chip';
 import TagIcon from '@mui/icons-material/Tag';
+import Avatar from '@mui/material/Avatar';
 import { useEffect, useState } from 'react';
 
+import Button from '@mui/material/Button';
+import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -64,9 +67,32 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="App">
-        <Slideshow sec={5000} images={images} />
-      </div>
+      <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1, mb: 2 }}>
+        <Typography variant="h5" gutterBottom>Blog Title</Typography>
+        <Typography variant="caption" display="block" gutterBottom>
+          とあるエンジニアのブログです。 #C++ #ROS #MATLAB #Python #Vim #Robotics #AutonomousDriving #ModelPredictiveControl #julialan
+        </Typography>
+
+        <Avatar alt="Remy Sharp" src="https://i.imgur.com/CzXTtJV.jpg" />
+
+        <Button variant="outlined" size="small" startIcon={<EmailIcon />}>Contact</Button>
+        <Button variant="outlined" size="small" startIcon={<EmailIcon />}>About</Button>
+        {social.map((network) => (
+          <Link
+            display="block"
+            variant="body1"
+            href="#"
+            key={network.name}
+            sx={{ mb: 0.5 }}
+          >
+            <Stack direction="row" spacing={1} alignItems="center">
+              <network.icon />
+              <span>{network.name}</span>
+            </Stack>
+          </Link>
+        ))}
+      </Paper>
+      <Slideshow sec={5000} images={images} />
 
       <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
         <Typography variant="h6" gutterBottom>Archives</Typography>
@@ -89,21 +115,6 @@ export default function Sidebar() {
       </Paper>
 
       <Paper elevation={3} >
-        <Typography variant="h6" gutterBottom>Social</Typography>
-        {social.map((network) => (
-          <Link
-            display="block"
-            variant="body1"
-            href="#"
-            key={network.name}
-            sx={{ mb: 0.5 }}
-          >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <network.icon />
-              <span>{network.name}</span>
-            </Stack>
-          </Link>
-        ))}
       </Paper>
     </>
   );

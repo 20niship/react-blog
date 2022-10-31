@@ -21,16 +21,16 @@ export default function Header() {
           variant="h5"
           color="inherit"
           align="center"
-          sx={{ flex: 1, ml:"200px"}}
+          sx={{ flex: 1, ml: "200px" }}
         >
           <Link href="/">{blog_title}</Link>
         </Typography>
 
         <Paper
           component="form"
-          sx={{display: 'flex', alignItems: 'center', width: 300 }}
+          sx={{ display: 'flex', alignItems: 'center', width: 300 }}
         >
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search"/>
+          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
           <IconButton type="button" sx={{ p: '8px' }} aria-label="search"><SearchIcon /></IconButton>
         </Paper>
       </Toolbar>
@@ -46,6 +46,16 @@ export default function Header() {
               </ul>
             </li>
           ))}
+
+          <li>
+            <a color="inherit">Settings</a>
+            <ul>
+              <li><a color="inherit" href="/user/logout"> Logout</a></li>
+              <li><a color="inherit" href="/admin/pages">Page</a></li>
+              <li><a color="inherit" href="/admin/users"> User</a></li>
+              <li><a color="inherit" href="/admin/analisys"> analisys</a></li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </React.Fragment>

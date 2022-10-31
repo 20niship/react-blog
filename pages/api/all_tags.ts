@@ -14,6 +14,5 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await connect();
   const t = await get_all_tags();
   const tags = t.map(x => x.name);
-  console.log(tags)
   res.status(200).json({ tags })
 }

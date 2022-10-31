@@ -187,8 +187,7 @@ export const delete_all_usergroups = async () => {
 }
 
 /* ----------------   Page Functions ----------------------  */
-
 export const get_collections = () => { return collections; }
 
-connect();
+// connect();
 

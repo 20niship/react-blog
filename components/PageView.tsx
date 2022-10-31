@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
 import InfoIcon from '@mui/icons-material/Info';
 import UpdateIcon from '@mui/icons-material/Update';
 import { Page } from '../lib/global'
@@ -25,7 +26,9 @@ export default function PageView(props: PageViewProps) {
       </Typography>
       <Chip icon={<InfoIcon />} label={page.update} />
       <Chip icon={<UpdateIcon />} label={page.create} />
-      <div dangerouslySetInnerHTML={{ __html: md2html(page.context) }} />
+      <Paper elevation={2} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
+        <div dangerouslySetInnerHTML={{ __html: md2html(page.context) }} />
+      </Paper>
     </>
   );
 }

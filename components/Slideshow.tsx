@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { CSSTransition } from "react-transition-group";
-import styles from "../styles/Slideshow.module.scss";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+
+import styles from '../styles/Slideshow.module.scss'
+import Card from '@mui/material/Card';
+import Slide from '@mui/material/Slide';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 type Props = {
   sec: number;
   images: string[];
 };
 
-const Showcase: React.FC<Props> = ({ sec = 1000, images = [] }: Props) => {
+export default function Showcase(props: Props) {
   const [count, setCount] = useState(0);
+  const { images, sec } = props;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,22 +30,40 @@ const Showcase: React.FC<Props> = ({ sec = 1000, images = [] }: Props) => {
     };
   }, [images, sec]);
 
-  const slide = images.map((image, index) => {
-    return (
-      <CSSTransition
-        key={index}
-        timeout={sec}
-        in={index === count}
-        classNames="fade"
-        unmountOnExit
-      >
-        <div style={{ backgroundImage: `url(${image})` }} />
-      </CSSTransition>
-    );
-  });
-
-  return <section className={styles.showcase}>{slide}</section>;
+  return (
+    <div className={styles.showcase}>
+      {
+        images.map((image, index) => {
+          return (
+            <CSSTransition
+              key={index}
+              timeout={sec}
+              in={index === count}
+              classNames="fade"
+              unmountOnExit
+            >
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={image}
+                  alt="green iguana"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Lizard
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Lizards are a widespread group of squamate reptiles, with over 6,000
+                    species, ranging across all continents except Antarctica
+                  </Typography>
+                </CardContent>
+              </Card>
+            </CSSTransition>
+          )
+        })
+      }
+    </div>
+  )
 };
-
-export default Showcase;
 
