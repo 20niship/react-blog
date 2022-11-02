@@ -2,7 +2,10 @@ import * as React from 'react';
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Layout from '../../components/admin/layout'
-import Chart from 'react-apexcharts'
+import dynamic from 'next/dynamic'
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+// import Chart from 'react-apexcharts'
 
 import { Box, LinearProgress, Card, CardContent, CardHeader, Divider, Typography, useTheme, Container, Grid, Avatar } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -10,7 +13,7 @@ import MoneyIcon from '@mui/icons-material/Money';
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 
 const Budget = (props) => (
-  <Card sx={{ height: '100%' }}    {...props}  >
+  <Card sx={{ height: '100%' }} {...props}  >
     <CardContent>
       <Grid
         container
@@ -309,10 +312,10 @@ export default function Dashboard() {
 
 Dashboard.getLayout = function getLayout(page: any) {
   return (
-    <>
+    <Layout>
       <Header />
       {page}
       <Footer />
-    </>
+    </Layout>
   );
 }

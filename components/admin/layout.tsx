@@ -1,11 +1,11 @@
-
 import { useState } from 'react';
 import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
 // import { DashboardNavbar } from './navbar';
 import { DashboardSidebar } from './sidebar';
 
-export const DashboardLayout = ({ children }) => {
+//  <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} />
+
+export default function({ children }) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   return (
     <>
@@ -18,12 +18,8 @@ export const DashboardLayout = ({ children }) => {
         }}
       >
         {children}
+        <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
       </Box>
-  //    <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} />
-      <DashboardSidebar
-        onClose={() => setSidebarOpen(false)}
-        open={isSidebarOpen}
-      />
     </>
   );
 };
