@@ -1,10 +1,7 @@
 import * as React from 'react';
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import Layout from '../../components/admin/layout'
 import dynamic from 'next/dynamic'
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
 // import Chart from 'react-apexcharts'
 
 import { Box, LinearProgress, Card, CardContent, CardHeader, Divider, Typography, useTheme, Container, Grid, Avatar } from '@mui/material';
@@ -13,7 +10,7 @@ import MoneyIcon from '@mui/icons-material/Money';
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 
 const Budget = (props) => (
-  <Card sx={{ height: '100%' }} {...props}  >
+  <Card sx={{ height: '100%' }} {...props}>
     <CardContent>
       <Grid
         container
@@ -21,19 +18,8 @@ const Budget = (props) => (
         sx={{ justifyContent: 'space-between' }}
       >
         <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="overline"
-          >
-            BUDGET
-          </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h4"
-          >
-            $24k
-          </Typography>
+          <Typography color="textSecondary" variant="overline">BUDGET</Typography>
+          <Typography color="textPrimary" variant="h4">$24k</Typography>
         </Grid>
         <Grid item>
           <Avatar
@@ -57,9 +43,6 @@ const Budget = (props) => (
         <ArrowDownwardIcon color="error" />
         <Typography
           color="error"
-          sx={{
-            mr: 1
-          }}
           variant="body2"
         >
           12%
@@ -78,24 +61,11 @@ const Budget = (props) => (
 
 
 export const TasksProgress = (props) => (
-  <Card
-    sx={{ height: '100%' }}
-    {...props}
-  >
+  <Card sx={{ height: '100%' }}    {...props}  >
     <CardContent>
-      <Grid
-        container
-        spacing={3}
-        sx={{ justifyContent: 'space-between' }}
-      >
+      <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
         <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="overline"
-          >
-            TASKS PROGRESS
-          </Typography>
+          <Typography color="textSecondary" variant="overline">TASKS PROGRESS</Typography>
           <Typography
             color="textPrimary"
             variant="h4"
@@ -116,10 +86,7 @@ export const TasksProgress = (props) => (
         </Grid>
       </Grid>
       <Box sx={{ pt: 3 }}>
-        <LinearProgress
-          value={75.5}
-          variant="determinate"
-        />
+        <LinearProgress value={75.5} variant="determinate" />
       </Box>
     </CardContent>
   </Card>
@@ -162,131 +129,37 @@ const AccessChart = () => {
     <div id="chart">
       <Chart options={options} series={series} type="line" height={350} />
     </div>
+
   );
 }
 
-
-import { Doughnut } from 'react-chartjs-2';
-import { } from '@mui/material';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import PhoneIcon from '@mui/icons-material/Phone';
-import TabletIcon from '@mui/icons-material/Tablet';
-
-const TrafficByDevice = (props) => {
-  const theme = useTheme();
-
-  const data = {
-    datasets: [
-      {
-        data: [63, 15, 22],
-        backgroundColor: ['#3F51B5', '#e53935', '#FB8C00'],
-        borderWidth: 8,
-        borderColor: '#FFFFFF',
-        hoverBorderColor: '#FFFFFF'
-      }
-    ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
-  };
-
+const Languages = () => {
+  const series = [44, 55, 41, 17, 15];
   const options = {
-    animation: false,
-    cutoutPercentage: 80,
-    layout: { padding: 0 },
-    legend: {
-      display: false
+    chart: {
+      type: 'donut',
     },
-    maintainAspectRatio: false,
-    responsive: true,
-    tooltips: {
-      backgroundColor: theme.palette.background.paper,
-      bodyFontColor: theme.palette.text.secondary,
-      borderColor: theme.palette.divider,
-      borderWidth: 1,
-      enabled: true,
-      footerFontColor: theme.palette.text.secondary,
-      intersect: false,
-      mode: 'index',
-      titleFontColor: theme.palette.text.primary
-    }
-  };
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  }
+  return <Chart options={options} series={series} type="donut" />
+}
 
-  const devices = [
-    {
-      title: 'Desktop',
-      value: 63,
-      icon: LaptopMacIcon,
-      color: '#3F51B5'
-    },
-    {
-      title: 'Tablet',
-      value: 15,
-      icon: TabletIcon,
-      color: '#E53935'
-    },
-    {
-      title: 'Mobile',
-      value: 23,
-      icon: PhoneIcon,
-      color: '#FB8C00'
-    }
-  ];
-
+const Comments = () => {
+  const comments = []
   return (
-    <Card {...props}>
-      <CardHeader title="Traffic by Device" />
-      <Divider />
-      <CardContent>
-        <Box
-          sx={{
-            height: 300,
-            position: 'relative'
-          }}
-        >
-          CHART HERE
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            pt: 2
-          }}
-        >
-          {devices.map(({
-            color,
-            icon: Icon,
-            title,
-            value
-          }) => (
-            <Box
-              key={title}
-              sx={{
-                p: 1,
-                textAlign: 'center'
-              }}
-            >
-              <Icon color="action" />
-              <Typography
-                color="textPrimary"
-                variant="body1"
-              >
-                {title}
-              </Typography>
-              <Typography
-                style={{ color }}
-                variant="h4"
-              >
-                {value}
-                %
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </CardContent>
-    </Card>
-  );
-};
-
-
+    <Typography variant="h4">Comments </Typography>
+  )
+}
 
 export default function Dashboard() {
   return (
@@ -302,8 +175,13 @@ export default function Dashboard() {
           <Grid item lg={3} sm={6} xl={3} xs={12}><Budget /></Grid>
           <Grid item xl={3} lg={3} sm={6} xs={12}><Budget /></Grid>
           <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
-          <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress sx={{ height: '100%' }} /></Grid>
-          <Grid item xl={3} lg={3} sm={6} xs={12}><AccessChart /></Grid>
+          <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
+
+          <Grid item xl={6} lg={6} sm={6} xs={12}><AccessChart /></Grid>
+          <Grid item xl={3} lg={3} sm={6} xs={12}><Languages /></Grid>
+          <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
+
+          <Grid item xl={6} lg={6} sm={6} xs={12}><Comments/></Grid>
         </Grid>
       </Container>
     </Box>
@@ -313,9 +191,7 @@ export default function Dashboard() {
 Dashboard.getLayout = function getLayout(page: any) {
   return (
     <Layout>
-      <Header />
       {page}
-      <Footer />
     </Layout>
   );
 }
