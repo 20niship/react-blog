@@ -60,7 +60,7 @@ const Budget = (props) => (
 
 
 
-export const TasksProgress = (props) => (
+const TasksProgress = (props) => (
   <Card sx={{ height: '100%' }}    {...props}  >
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
@@ -154,12 +154,144 @@ const Languages = () => {
   return <Chart options={options} series={series} type="donut" />
 }
 
-const Comments = () => {
-  const comments = []
-  return (
-    <Typography variant="h4">Comments </Typography>
-  )
-}
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Tooltip, Alert } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+
+const orders = [
+  {
+    id: 0,
+    ref: 'CDD1049',
+    amount: 30.5,
+    customer: {
+      name: 'Ekaterina Tankova'
+    },
+    createdAt: 1555016400000,
+    status: 'pending'
+  },
+  {
+    id: 1,
+    ref: 'CDD1048',
+    amount: 25.1,
+    customer: {
+      name: 'Cao Yu'
+    },
+    createdAt: 1555016400000,
+    status: 'delivered'
+  },
+  {
+    id: 2,
+    ref: 'CDD1047',
+    amount: 10.99,
+    customer: {
+      name: 'Alexa Richardson'
+    },
+    createdAt: 1554930000000,
+    status: 'refunded'
+  },
+  {
+    id: 5,
+    ref: 'CDD1046',
+    amount: 96.43,
+    customer: {
+      name: 'Anje Keizer'
+    },
+    createdAt: 1554757200000,
+    status: 'pending'
+  },
+  {
+    id: 10,
+    ref: 'CDD1045',
+    amount: 32.54,
+    customer: {
+      name: 'Clarke Gillebert'
+    },
+    createdAt: 1554670800000,
+    status: 'delivered'
+  },
+  {
+    id: 3,
+    ref: 'CDD1044',
+    amount: 16.76,
+    customer: {
+      name: 'Adam Denisov'
+    },
+    createdAt: 1554670800000,
+    status: 'delivered'
+  }
+];
+
+const Comments = (props) => (
+  <Card>
+    <CardHeader title="Latest Orders" />
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            Order Ref
+          </TableCell>
+          <TableCell>
+            Customer
+          </TableCell>
+          <TableCell sortDirection="desc">
+            <Tooltip
+              enterDelay={300}
+              title="Sort"
+            >
+              <TableSortLabel
+                active
+                direction="desc"
+              >
+                Date
+              </TableSortLabel>
+            </Tooltip>
+          </TableCell>
+          <TableCell>
+            Status
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {orders.map((order) => (
+          <TableRow
+            hover
+            key={order.id}
+          >
+            <TableCell>
+              {order.ref}
+            </TableCell>
+            <TableCell>
+              {order.customer.name}
+            </TableCell>
+            <TableCell>
+              {(new Date(order.createdAt)).toISOString().split('T')[0]}
+            </TableCell>
+            <TableCell>
+              {(order.status === 'delivered') && <Alert severity="success">Alert</Alert>}
+              {(order.status === 'refunded') && <Alert severity="info">Hoge</Alert>}
+              {(order.status === 'pending') && <Alert severity="error">AAA</Alert>}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        p: 2
+      }}
+    >
+      <Button
+        color="primary"
+        endIcon={<ArrowRightIcon fontSize="small" />}
+        size="small"
+        variant="text"
+      >
+        View all
+      </Button>
+    </Box>
+  </Card >
+);
 
 export default function Dashboard() {
   return (
@@ -177,11 +309,10 @@ export default function Dashboard() {
           <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
           <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
 
-          <Grid item xl={6} lg={6} sm={6} xs={12}><AccessChart /></Grid>
+          <Grid item xl={9} lg={9} sm={12} xs={12}><AccessChart /></Grid>
           <Grid item xl={3} lg={3} sm={6} xs={12}><Languages /></Grid>
-          <Grid item xl={3} lg={3} sm={6} xs={12}><TasksProgress /></Grid>
-
-          <Grid item xl={6} lg={6} sm={6} xs={12}><Comments/></Grid>
+          <Grid item xl={6} lg={6} sm={12} xs={12}><Comments /></Grid>
+          <Grid item xl={6} lg={6} sm={12} xs={12}><Comments /></Grid>
         </Grid>
       </Container>
     </Box>

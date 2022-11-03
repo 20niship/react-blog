@@ -15,6 +15,21 @@ const theme = createTheme({
     // primary: blue,
     mode: "dark"
   },
+
+  //https://www.ultra-noob.com/blog/2021/58/
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        ::-webkit-scrollbar{
+            width: 15px;
+        },
+        ::-webkit-scrollbar-thumb {
+            background-color: #276976;
+            border-radius: 10px;
+        }
+        `
+    },
+  },
 });
 
 export function NoSidebarLayout({ children }) {
