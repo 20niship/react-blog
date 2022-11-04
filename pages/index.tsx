@@ -8,7 +8,8 @@ import { GetServerSideProps } from 'next';
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { useState } from 'react'
+import { useState, Fragment, useRouter } from 'react'
+import SearchResultList from '../components/SearchResultList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   await connect();
@@ -22,21 +23,11 @@ type Props = {
 }
 
 export default function Home(props: Props) {
-  const [page, setPage] = useState(1);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
-
   return (
-    <>
-      <List className={styles.container} dense={false}>
-        {props.pages.map((page) => (
-          <FeaturedPost key={page.title} page={page} />
-        ))}
-      </List>
-      <Typography>Page: {page}</Typography>
-      <Pagination count={10} page={page} onChange={handleChange} />
-    </>
+    <Fragment>
+      <Typography variant="h4">記事一覧</Typography>
+      <SearchResultList pages={props.pages} page={1} count={10} />
+    </Fragment>
   )
 }
 

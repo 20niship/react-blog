@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,11 +8,24 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import styles from '../styles/Header.module.css'
 import { sections, blog_title } from '../lib/params';
+import { useState, Fragment } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Header() {
+  const [search_query, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const search = () => {
+    router.push(`/search?q=${search_query}`);
+  }
+  const onKeyDown = (e: any) => {
+    if (e.keyCode == 13) search();
+    return true;
+  }
+
   return (
-    <React.Fragment>
+    <Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Button variant="outlined" size="small" href="/user/login">Login</Button>
         <Typography
@@ -30,8 +42,8 @@ export default function Header() {
           component="form"
           sx={{ display: 'flex', alignItems: 'center', width: 300 }}
         >
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
-          <IconButton type="button" sx={{ p: '8px' }} aria-label="search"><SearchIcon /></IconButton>
+          <InputBase sx={{ ml: 1, flex: 1 }} value={search_query} onKeyDown={onKeyDown} onChange={e => { setSearchQuery(e.target.value) }} placeholder="Search" />
+          <IconButton type="button" sx={{ p: '8px' }} aria-label="search" onClick={search}><SearchIcon /></IconButton>
         </Paper>
       </Toolbar>
       <nav className={styles.headermenu}>
@@ -58,7 +70,7 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-    </React.Fragment>
+    </Fragment>
   );
 }
 
