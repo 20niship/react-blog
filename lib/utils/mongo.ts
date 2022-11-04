@@ -1,6 +1,6 @@
 import { Db, MongoClient, Collection, Int32 } from "mongodb";
 const NumberInt = Int32;
-import { Page, User, Usergroup } from "../global"
+import { Page, ViewStatus, User, Usergroup } from "../global"
 
 let cachedClient: MongoClient;
 let cachedDb: Db;
@@ -74,21 +74,21 @@ export const pages2json = (pages: Page[]) => {
 
 // get latest posts
 export const page_list = async (page: number, limit: number) => {
-  const p = await collections.pages?.find<Page>({ published: true }).sort({ update: -1 }).skip(page * limit).limit(limit).toArray();
+  const p = await collections.pages?.find<Page>({ status: ViewStatus.Published }).sort({ update: -1 }).skip(page * limit).limit(limit).toArray();
   if (p == undefined) return [];
   return pages2json(p);
 }
 
 // get latest posts
-const small_fields = { title: 1, user: 1, tags: 1, lgbt: 1, create: 1, update: 1, published: 1, icon:1 , id:1}
+const small_fields = { title: 1, user: 1, tags: 1, lgbt: 1, create: 1, update: 1, published: 1, icon: 1, id: 1 }
 export const get_latest_small = async (page: number, limit: number) => {
-  const p = await collections.pages?.find({ published: true }).sort({ update: -1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
+  const p = await collections.pages?.find({ status: ViewStatus.Published }).sort({ update: -1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
   if (p == undefined) return [];
   return pages2json(p);
 }
 
 export const get_favorites_small = async (page: number, limit: number) => {
-  const p = await collections.pages?.find({ published: true }).sort({ lgbt: 1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
+  const p = await collections.pages?.find({ status: ViewStatus.Published }).sort({ lgbt: 1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
   if (p == undefined) return [];
   return pages2json(p);
 }
@@ -104,8 +104,8 @@ export const insert_page = async (page: Page) => {
   return res?.acknowledged || false;
 }
 
-export const edit_page = async (_id: string, page: Page) => {
-  const res = await collections.pages?.updateOne({ _id }, page);
+export const edit_page = async (id: number, page: Page) => {
+  const res = await collections.pages?.updateOne({ id }, page);
   return res?.acknowledged || false;
 }
 
@@ -127,6 +127,7 @@ export const page_month_stats = async () => {
     { $group: { _id: { $dateToString: { date: "$create", format: "%Y-%m" } }, count: { $sum: 1 } } }
   ];
   const res = await collections.pages?.aggregate(pipeline).toArray();
+  if (res == undefined) return [];
   return res.map(x => { return { month: x._id, count: x.count } })
 }
 
@@ -136,6 +137,7 @@ export const get_all_tags = async () => {
     { $group: { _id: "$tags", count: { $sum: 1 } } }
   ];
   const tags = await collections.pages?.aggregate(pipeline).toArray();
+  if (tags == undefined) return [];
   return tags.map(x => { return { name: x._id[0], count: x.count } })
 }
 
