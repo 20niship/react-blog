@@ -21,15 +21,15 @@ export default function FeaturedPost(props: FeaturedPostProps) {
   const router = useRouter();
   return (
     <CardActionArea component="a" href={"/view/" + page.id} variant="outlined">
-      <Card sx={{ display: 'flex', m: 2, height: 170 }} elevation={5}>
+      <Card sx={{ display: 'flex', m: 2, height: 170 }} elevation={3}>
         <CardMedia
           component="img"
-          sx={{ width: 140, display: { xs: 'none', sm: 'block' } }}
+          sx={{ width: 140 }}
           image={page.icon}
           alt={page.title}
         />
         <CardContent sx={{ flex: 1 }}>
-          <Typography component="h2" variant="h5">{page.title}</Typography>
+          <Typography component="h2" variant="h6">{page.title}</Typography>
           <Chip icon={<InfoIcon />} label={page.update} />
           <Chip icon={<UpdateIcon />} label={page.create} />
           {
@@ -37,7 +37,7 @@ export default function FeaturedPost(props: FeaturedPostProps) {
               return <Chip icon={<TagIcon />} label={tag} key={tag} onClick={() => { router.push("/search?t=" + tag); }} size="small" />
             })
           }
-          <Typography variant="subtitle1" paragraph color="gray">
+          <Typography variant="body1" paragraph color="gray">
             {page.context.slice(0, 300)} .......
           </Typography>
         </CardContent>

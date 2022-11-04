@@ -8,6 +8,8 @@ export const collections: {
   pages?: Collection,
   users?: Collection,
   usergroups?: Collection,
+  history?: Collection,
+  comments?: Collection,
   media?: Collection
 } = {}
 
@@ -35,6 +37,8 @@ export async function connect() {
   collections.pages = db.collection("page");
   collections.users = db.collection("users");
   collections.usergroups = db.collection("usergroups");
+  collections.media = db.collection("media");
+  collections.media = db.collection("media");
   collections.media = db.collection("media");
   return {
     client: cachedClient,

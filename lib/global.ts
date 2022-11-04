@@ -1,5 +1,5 @@
-const ViewStatus = { Published: 0, Draft: 1, Deleted: 2, Editing: 3 } as const;
-export type ViewStatus = typeof ViewStatus[keyof typeof ViewStatus];
+export const ViewStatus = { Published: 0, Draft: 1, Deleted: 2, Editing: 3 } as const;
+type ViewStatus = typeof ViewStatus[keyof typeof ViewStatus];
 
 export interface Page {
   _id: string,
