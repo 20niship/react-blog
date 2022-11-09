@@ -84,7 +84,7 @@ export const page_list = async (page: number, limit: number) => {
 }
 
 // get latest posts
-const small_fields = { title: 1, user: 1, tags: 1, lgbt: 1, create: 1, update: 1, published: 1, icon: 1, id: 1 }
+const small_fields = { title: 1, user: 1, tags: 1, lgtm: 1, create: 1, update: 1, published: 1, icon: 1, id: 1 }
 export const get_latest_small = async (page: number, limit: number) => {
   const p = await collections.pages?.find({ status: ViewStatus.Published }).sort({ update: -1 }).skip(page * limit).limit(limit).project<Page>(small_fields).toArray();
   if (p == undefined) return [];

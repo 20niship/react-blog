@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     n = 7;
     let pages: Page[] = [];
     switch (sort) {
-      case "lgbt":
+      case "lgtm":
         pages = await get_favorites_small(page, n);
         break;
       case "latest":

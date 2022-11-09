@@ -1,7 +1,7 @@
 export const ViewStatus = { Published: 0, Draft: 1, Deleted: 2, Editing: 3 } as const;
-type ViewStatus = typeof ViewStatus[keyof typeof ViewStatus];
+export type ViewStatuses = typeof ViewStatus[keyof typeof ViewStatus];
 
-export interface Page {
+export interface Post{
   _id: string,
   id: number,
   title: string,
@@ -11,9 +11,9 @@ export interface Page {
   create: Date | string,
   context: string,
   icon: string,
-  status: ViewStatus
-  lgbt: number,
-  viewcount:number,
+  status: ViewStatuses
+  lgtm: number,
+  viewcount: number,
 };
 
 export interface User {
@@ -39,7 +39,7 @@ export interface Comment {
   id: number,
   author: string,
   email: string,
-  status: ViewStatus,
+  status: ViewStatuses,
   title: string,
   context: string,
   timestamp: Date | string,
@@ -52,7 +52,7 @@ export interface Media {
   page_id: string
 }
 
-export interface History extends Page{
+export interface History extends Page {
 }
 
 

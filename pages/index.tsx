@@ -1,32 +1,25 @@
-import type { NextPage } from 'next'
-import List from '@mui/material/List'
-import styles from '../styles/Home.module.css'
-import { connect, page_list } from '../lib/utils/mongo'
-import FeaturedPost from '../components/FeaturedPost';
-import { Page } from '../lib/global'
+import { find_latest } from '../lib/mongo'
 import { GetServerSideProps } from 'next';
+import { Post } from '../lib/global'
 import Typography from '@mui/material/Typography';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import { useState, Fragment, useRouter } from 'react'
+import { Fragment } from 'react'
 import SearchResultList from '../components/SearchResultList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  await connect();
-  const pages = await page_list(0, 30);
-  console.log("pages = ", pages)
-  return { props: { pages } }
+  const posts = await find_latest(0, 30);
+  console.log("posts = ", posts)
+  return { props: { posts } }
 }
 
 type Props = {
-  pages: Page | undefined;
+  posts: Post[];
 }
 
 export default function Home(props: Props) {
   return (
     <Fragment>
       <Typography variant="h4">記事一覧</Typography>
-      <SearchResultList pages={props.pages} page={1} count={10} />
+      <SearchResultList posts={props.posts} page={1} count={10} />
     </Fragment>
   )
 }

@@ -1,17 +1,14 @@
 import List from '@mui/material/List'
 import styles from '../styles/Home.module.css'
-import { connect, page_list } from '../lib/utils/mongo'
 import FeaturedPost from '../components/FeaturedPost';
-import { Page } from '../lib/global'
-import { GetServerSideProps } from 'next';
+import { Post } from '../lib/global'
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useState, Fragment, ChangeEvent } from 'react'
-import { useRouter } from 'next/router';
 
 type Props = {
-  pages: Page[],
+  posts: Post[],
   const: number,
   page: number,
 }
@@ -27,7 +24,7 @@ export default function SearchResultList(props: Props) {
     <Fragment>
       <List className={styles.container} dense={false} >
         {
-          props.pages.map((page) => (
+          props.posts.map((page) => (
             <FeaturedPost key={page.title} page={page} />
           ))
         }
