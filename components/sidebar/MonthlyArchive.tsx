@@ -12,7 +12,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [archives, setArchives] = useState([]);
   const setup_archives = async () => {
-    const r = await fetch("/api/month_stat", {
+    const r = await fetch("/api/util/month_stat", {
       method: "POST",
       headers: {
         'Accept': 'application/json',

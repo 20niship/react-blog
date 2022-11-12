@@ -54,7 +54,6 @@ export const latest_with_draft = async (page: number = 0, limit: number = 20) =>
 
 export const latest_small = async (page: number = 0, limit: number = 20) => {
   const p = await models.Post.find({ status: ViewStatus.Published }, null, { sort: { lgtm: 1 }, skip: limit * page, limit, projection: small_fields }).lean<Post[]>();
-  console.log(pages2json(p))
   return pages2json(p);
 }
 

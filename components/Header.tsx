@@ -63,9 +63,9 @@ export default function Header() {
             <a color="inherit">Settings</a>
             <ul>
               <li><a color="inherit" href="/user/logout"> Logout</a></li>
-              <li><a color="inherit" href="/admin/pages">Page</a></li>
+              <li><a color="inherit" href="/admin/posts">posts</a></li>
               <li><a color="inherit" href="/admin/users"> User</a></li>
-              <li><a color="inherit" href="/admin/analisys"> analisys</a></li>
+              <li><a color="inherit" href="/admin/dashboard"> Dashboard</a></li>
             </ul>
           </li>
         </ul>

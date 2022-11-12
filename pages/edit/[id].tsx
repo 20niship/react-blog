@@ -76,6 +76,11 @@ export default function Editor(props: Props) {
     opener("Post updated Successfully")
   }
 
+  const preview = async () => {
+    router.push("/view/" + id)
+  }
+
+
   return (
     <>
       <Grid container spacing={2} sx={{ width: "100vw", margin: "auto" }}>
@@ -87,6 +92,7 @@ export default function Editor(props: Props) {
           <Chip icon={<UpdateIcon />} label={post.create as string} />
           <Button variant="outlined" onClick={savePost}>Save</Button>
           <Button variant="outlined" color="error" onClick={deletePost}>Delete</Button>
+          <Button variant="outlined" color="info" onClick={preview}>Preview</Button>
         </Grid>
         <Grid item xs={6}>
           <CodeMirror

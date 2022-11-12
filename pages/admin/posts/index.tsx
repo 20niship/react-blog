@@ -7,6 +7,7 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { Post, ViewStatus } from '@/lib/global'
 import Layout from '@/components/admin/layout'
 import Tags from '@/components/Tags'
+import Link from 'next/link'
 
 export default function PageConfig() {
   const [page, setPage] = useState(0);
@@ -39,6 +40,9 @@ export default function PageConfig() {
     <>
       <Typography variant="h2">All Posts</Typography>
       <Typography variant="h5">{count}posts</Typography>
+      <Stack alignItems="center">
+        <Pagination count={Math.floor(count / limit)} page={page + 1} onChange={handleChange} size="large" color="primary" />
+      </Stack>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -56,7 +60,7 @@ export default function PageConfig() {
         <TableBody>
           {posts.map((post) => (
             <TableRow hover key={post._id}>
-              <TableCell>{post.title}</TableCell>
+              <TableCell><Link href={"/admin/posts/"+ post._id}>{post.title}</Link></TableCell>
               <TableCell>{post.user}</TableCell>
               <TableCell><Tags tags={post.tags} size="small" /></TableCell>
               <TableCell>

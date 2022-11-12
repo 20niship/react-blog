@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import connect from '../../lib/mongo_connect'
-import { models } from '../../lib/mongo'
+import connect from '@/lib/mongo_connect'
+import { models } from '@/lib/mongo'
 
 type Stat = {
   month: string,

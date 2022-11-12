@@ -6,7 +6,7 @@ import Tags from '../Tags';
 export default function Sidebar() {
   const [tags, setTags] = useState([]);
   const setup_tags = async () => {
-    const r = await fetch("/api/all_tags", {
+    const r = await fetch("/api/util/all_tags", {
       method: "POST",
       headers: {
         'Accept': 'application/json',

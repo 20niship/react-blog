@@ -1,7 +1,7 @@
-import PageView from '../../components/PageView';
-import { Post } from '../../lib/global'
+import PageView from '@/components/PageView';
+import { Post } from '@/lib/global'
 import { GetServerSideProps } from 'next';
-import { get_post } from '../../lib/mongo'
+import { get_post } from '@/lib/mongo'
 import MenuDial from '@/components/menu/MenuDial'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
