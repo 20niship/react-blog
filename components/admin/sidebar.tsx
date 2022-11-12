@@ -59,6 +59,7 @@ export const DashboardSidebar = (props: Props) => {
         {items.map((item) => (
           <ListItem
             disableGutters
+            key={item.title}
             sx={{
               display: 'flex',
               mb: 0.5,
@@ -67,7 +68,7 @@ export const DashboardSidebar = (props: Props) => {
             }}
           >
             <NextLink href={item.href} passHref>
-              <Button component="a" startIcon={item.icon} disableRipple        >
+              <Button component="a" startIcon={item.icon} disableRipple>
                 <Box sx={{ flexGrow: 1 }}>{item.title}</Box>
               </Button>
             </NextLink>

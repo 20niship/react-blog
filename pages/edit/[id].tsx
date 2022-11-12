@@ -16,6 +16,8 @@ import Footer from '../../components/Footer';
 import { Post } from '../../lib/global'
 import { get_post } from '../../lib/mongo'
 import { BlankLayout } from '../../components/Layouts';
+import { useRouter } from 'next/router';
+import useMessage from '@/components/Message';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.query.id as string;
@@ -27,7 +29,15 @@ type Props = {
   post: Post | null
 }
 
+const headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
 export default function Editor(props: Props) {
+  const router = useRouter();
+  const [Message, opener] = useMessage();
+  const { id } = router.query;
   if (props.post == undefined) {
     return (
       <h1>Not found!</h1>
@@ -50,12 +60,20 @@ export default function Editor(props: Props) {
     update_text(post.context, false);
   }, [])
 
-  const deletePost = () => {
-
+  const deletePost = async () => {
+    const r = await fetch("/api/posts/" + id, { method: "DELETE", headers, body: "" });
+    if (!r.ok) return;
+    console.log(id);
   }
 
-  const savePost = () => {
-
+  const savePost = async () => {
+    const r = await fetch("/api/posts/" + id, { method: "POST", headers, body: JSON.stringify({ post: { context: text } }) });
+    if (!r.ok) {
+      opener("Post update Error!", "error")
+      return;
+    }
+    console.log(id);
+    opener("Post updated Successfully")
   }
 
   return (
@@ -83,6 +101,7 @@ export default function Editor(props: Props) {
           <div key={new Date().getTime()} dangerouslySetInnerHTML={{ __html: mdhtml }} />
         </Grid>
       </Grid>
+      {Message}
     </>
   )
 }

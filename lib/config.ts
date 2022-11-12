@@ -1,4 +1,3 @@
-
 const config = {
     general : {
       title : "RoboTech",

@@ -18,19 +18,24 @@ type Data = {
 }
 const delete_post = async (_id: string, res: NextApiResponse) => {
   try {
+    await connect();
     await models.Post.findByIdAndRemove({ _id });
+    res.status(200).json({ post: { _id } })
   } catch (error) {
     res.status(500).json(error)
   }
 }
 
-const update_post = async (post: Post, res: NextApiResponse) => {
-  console.log("updateing: ", post);
+const update_post = async (id: string, post: Post, res: NextApiResponse) => {
   try {
-    const filter = { _id: post._id };
-    const newpost = post; //TODO
-    const r = await models.Post.findOneAndUpdate(filter, newpost);
-    console.log(r)
+    const filter = { _id: id };
+    let updater = {
+      update: Date.now()
+    } as any;
+    if (post.context !== undefined) updater.context = post.context;
+    await connect();
+    const r = await models.Post.findOneAndUpdate(filter, updater);
+    res.status(200).json({ post: r })
   } catch (error) {
     res.status(500).json(error)
   }
@@ -38,6 +43,7 @@ const update_post = async (post: Post, res: NextApiResponse) => {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const query = req.method === "GET" ? req.query : req.body;
+  const id = req.query?.id as string;
   switch (req.method) {
     case "GET": {
       const posts = await search(query);
@@ -46,14 +52,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     case "POST": {
-      await update_post(query, res);
+      if (query.post == undefined) {
+        console.error("no post field!");
+        res.status(500).json({ err: "no post field!" })
+      } else {
+        console.log(query);
+        await update_post(id, query?.post, res);
+      }
       break;
     }
 
     case "DELETE": {
       console.log("DElete post");
-      await delete_post(query._id, res);
+      await delete_post(id, res);
+      break;
     }
+
+    default:
+      console.error("Method not Allowed!!");
+      res.status(401).json({ err: "method not allowed" })
   }
 }
 

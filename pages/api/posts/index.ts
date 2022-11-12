@@ -25,8 +25,6 @@ const create_post = async (title: string, res: NextApiResponse) => {
       title,
       user: 1,
       status: ViewStatus.Draft,
-      update: Date.now(),
-      create: Date.now(),
     });
     const new_post = await savePost.save()
     const post = page2json(new_post)
@@ -42,8 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const query = req.method === "GET" ? req.query : req.body;
   switch (req.method) {
     case "GET": {
-      const posts = await search(query);
-      res.status(200).json({ posts });
+      const result = await search(query);
+      res.status(200).json(result);
       break;
     }
 

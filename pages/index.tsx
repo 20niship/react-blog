@@ -1,4 +1,4 @@
-import { latest } from '../lib/mongo'
+import { latest, latest_with_draft } from '../lib/mongo'
 import { GetServerSideProps } from 'next';
 import { Post } from '../lib/global'
 import Typography from '@mui/material/Typography';
@@ -6,7 +6,8 @@ import { Fragment } from 'react'
 import SearchResultList from '../components/SearchResultList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const posts = await latest();
+  // const posts = await latest();
+  const posts = await latest_with_draft();
   return { props: { posts } }
 }
 
