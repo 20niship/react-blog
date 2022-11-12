@@ -1,18 +1,24 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
+import { Chip, Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import InfoIcon from '@mui/icons-material/Info';
 import UpdateIcon from '@mui/icons-material/Update';
-import { Page } from '../lib/global'
+import { Post } from '../lib/global'
 import md2html from '../lib/utils/md';
+import { useRouter } from 'next/router';
+import Tags from './Tags'
 
 interface PageViewProps {
-  page: Page;
+  post: Post;
 }
 
 export default function PageView(props: PageViewProps) {
-  const { page } = props;
+  const { post } = props;
+  const router = useRouter();
+  const edit = () => {
+    router.push(`/edit/${post._id}`);
+  }
   return (
     <>
       <link rel="stylesheet"
@@ -21,13 +27,15 @@ export default function PageView(props: PageViewProps) {
       <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
       <script>hljs.initHighlightingOnLoad();</script>
 
-      <Typography component="h2" variant="h5">
-        {page.title}
+      <Typography component="h2" variant="h4" sx={{ m: 1, p: 1 }}>
+        {post.title}
+        <Button onClick={edit} variant="outlined">Edit</Button>
       </Typography>
-      <Chip icon={<InfoIcon />} label={page.update} />
-      <Chip icon={<UpdateIcon />} label={page.create} />
+      <Chip icon={<InfoIcon />} label={post.update as string} />
+      <Chip icon={<UpdateIcon />} label={post.create as string} />
+      <Tags tags={post.tags} />
       <Paper elevation={2} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
-        <div dangerouslySetInnerHTML={{ __html: md2html(page.context) }} />
+        <div dangerouslySetInnerHTML={{ __html: md2html(post.context) }} />
       </Paper>
     </>
   );

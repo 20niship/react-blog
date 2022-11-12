@@ -2,7 +2,7 @@ import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Typography from '@mui/material/Typography';
-import { Page } from "../lib/global"
+import { Post } from "../lib/global"
 import Slideshow from '../components/Slideshow'
 import About from './sidebar/about';
 import MonthlyArchive from './sidebar/MonthlyArchive';
@@ -16,23 +16,21 @@ const headers = {
 };
 
 export default function Sidebar() {
-  const router = useRouter();
-
-  const [latest, setLatest] = useState<Page[]>([]);
-  const [favorites, setFavorites] = useState<Page[]>([]);
+  const [latest, setLatest] = useState<Post[]>([]);
+  const [favorites, setFavorites] = useState<Post[]>([]);
 
   const setup = async () => {
     {
       const r = await fetch("/api/search", { method, headers, body: JSON.stringify({ is_short: true, sort: "latest" }) });
       if (!r.ok) return;
       const js = await r.json();
-      setLatest(js.pages)
+      setLatest(js.posts)
     }
     {
       const r = await fetch("/api/search", { method, headers, body: JSON.stringify({ is_short: true, sort: "lgbt" }) });
       if (!r.ok) return;
       const js = await r.json();
-      setLatest(js.pages)
+      setLatest(js.posts)
     }
   }
   useEffect(() => { setup(); }, []);
@@ -60,7 +58,7 @@ export default function Sidebar() {
 
       <Paper elevation={5} sx={{ borderRadius: 1, mt: 2, p: 1 }}>
         <Typography variant="h6" gutterBottom>Latests</Typography>
-        <SmallList pages={latest} />
+        <SmallList posts={latest} />
       </Paper>
 
       <Paper elevation={3} >

@@ -1,25 +1,33 @@
 import PageView from '../../components/PageView';
-import { Page } from '../../lib/global'
+import { Post } from '../../lib/global'
 import { GetServerSideProps } from 'next';
-import { connect, get_page_by_id } from '../../lib/utils/mongo'
+import { get_post } from '../../lib/mongo'
+import MenuDial from '@/components/menu/MenuDial'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = context.query.id;
-  await connect();
-  const page = await get_page_by_id(id);
-  return { props: { page } }
+  const id = context.query.id as string;
+  const post = await get_post(id);
+  return { props: { post } }
 }
 
 type Props = {
-  page: Page | null
+  post: Post | null
 }
 
 export default function Home(props: Props) {
-  if (props.page == undefined) {
+  if (props.post == undefined) {
     return (
-      <h1>Not found!</h1>
+      <>
+        <h1>Not found!</h1>
+        <MenuDial />
+      </>
     )
   }
-  return <PageView page={props.page} />
+  return (
+    <>
+      <PageView post={props.post} />
+      <MenuDial />
+    </>
+  )
 }
 

@@ -24,8 +24,8 @@ export default function SearchResultList(props: Props) {
     <Fragment>
       <List className={styles.container} dense={false} >
         {
-          props.posts.map((page) => (
-            <FeaturedPost key={page.title} page={page} />
+          props.posts.map((post) => (
+            <FeaturedPost key={post.title} post={post} />
           ))
         }
       </List>

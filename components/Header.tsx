@@ -53,7 +53,7 @@ export default function Header() {
               <a color="inherit" href={section.url}> {section.title}</a>
               <ul>
                 {section.child.map((c) => (
-                  <li><a color="inherit" href={c.url}> {c.title}</a></li>
+                  <li key={c.url}><a color="inherit" href={c.url}> {c.title}</a></li>
                 ))}
               </ul>
             </li>

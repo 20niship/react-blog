@@ -4,31 +4,32 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Divider from '@mui/material/Divider';
-import { Page } from '../../lib/global'
+import { Post } from '../../lib/global'
+import { Fragment } from 'react';
 
 interface Props {
-  pages: Page[];
+  posts: Post[];
 }
 
 export default function FeaturedPost(props: Props) {
-  const { pages } = props;
-  const p = pages.map(page => {
+  const { posts } = props;
+  const p = posts.map(post => {
     return (
-      <>
-        <CardActionArea component="a" href={"/view/" + page.id} variant="outlined" >
+      <Fragment key={post._id}>
+        <CardActionArea component="a" href={"/view/" + post._id} variant="outlined" >
           <Card sx={{ display: 'flex', m: 1, height: "70px" }} >
             <CardMedia
               component="img"
-              sx={{ width: 50, height:50}}
-              image={page.icon}
+              sx={{ width: 50, height: 50 }}
+              image={post.icon}
             />
             <CardContent sx={{ flex: 1 }}>
-              <Typography component="h2" variant="body2">{page.title}</Typography>
+              <Typography component="h2" variant="body2">{post.title}</Typography>
             </CardContent>
           </Card>
         </CardActionArea>
         <Divider />
-      </>
+      </Fragment>
     )
   })
 

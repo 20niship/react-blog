@@ -1,8 +1,5 @@
 import { GetServerSideProps } from 'next';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
+import { Grid, Button, Typography, Chip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import UpdateIcon from '@mui/icons-material/Update';
 
@@ -14,32 +11,30 @@ import { githubDark } from '@uiw/codemirror-theme-github';
 import { useCallback, useEffect, useState } from 'react';
 
 import md2html from '../../lib/utils/md';
-import PageView from '../../components/PageView';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { Page } from '../../lib/global'
-import { connect, get_page_by_id } from '../../lib/utils/mongo'
+import { Post } from '../../lib/global'
+import { get_post } from '../../lib/mongo'
 import { BlankLayout } from '../../components/Layouts';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = context.query.id;
-  await connect();
-  const page = await get_page_by_id(id);
-  return { props: { page } }
+  const id = context.query.id as string;
+  const post = await get_post(id);
+  return { props: { post } }
 }
 
 type Props = {
-  page: Page | null
+  post: Post | null
 }
 
 export default function Editor(props: Props) {
-  if (props.page == undefined) {
+  if (props.post == undefined) {
     return (
       <h1>Not found!</h1>
     )
   }
 
-  const { page } = props;
+  const { post } = props;
   const [text, setText] = useState("");
   const [mdhtml, setMdhtml] = useState("");
 
@@ -52,18 +47,28 @@ export default function Editor(props: Props) {
   }, []);
 
   useEffect(() => {
-    update_text(page.context, false);
+    update_text(post.context, false);
   }, [])
+
+  const deletePost = () => {
+
+  }
+
+  const savePost = () => {
+
+  }
 
   return (
     <>
       <Grid container spacing={2} sx={{ width: "100vw", margin: "auto" }}>
         <Grid item xs={12}>
           <Typography component="h2" variant="h5">
-            {page.title}
+            {post.title}
           </Typography>
-          <Chip icon={<InfoIcon />} label={page.update} />
-          <Chip icon={<UpdateIcon />} label={page.create} />
+          <Chip icon={<InfoIcon />} label={post.update as string} />
+          <Chip icon={<UpdateIcon />} label={post.create as string} />
+          <Button variant="outlined" onClick={savePost}>Save</Button>
+          <Button variant="outlined" color="error" onClick={deletePost}>Delete</Button>
         </Grid>
         <Grid item xs={6}>
           <CodeMirror
@@ -82,11 +87,11 @@ export default function Editor(props: Props) {
   )
 }
 
-Editor.getLayout = function getLayout(page) {
+Editor.getLayout = function getLayout(post) {
   return (
     <BlankLayout>
       <Header />
-      {page}
+      {post}
       <Footer />
     </BlankLayout>
   );

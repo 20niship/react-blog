@@ -10,35 +10,35 @@ import InfoIcon from '@mui/icons-material/Info';
 import UpdateIcon from '@mui/icons-material/Update';
 import { useRouter } from 'next/router'
 
-import { Page } from '../lib/global'
+import { Post} from '../lib/global'
 
 interface FeaturedPostProps {
-  page: Page;
+  post: Post;
 }
 
 export default function FeaturedPost(props: FeaturedPostProps) {
-  const { page } = props;
+  const { post } = props;
   const router = useRouter();
   return (
-    <CardActionArea component="a" href={"/view/" + page.id} variant="outlined">
+    <CardActionArea component="a" href={"/view/" + post._id} variant="outlined">
       <Card sx={{ display: 'flex', m: 2, height: 170 }} elevation={3}>
         <CardMedia
           component="img"
           sx={{ width: 140 }}
-          image={page.icon}
-          alt={page.title}
+          image={post.icon}
+          alt={post.title}
         />
         <CardContent sx={{ flex: 1 }}>
-          <Typography component="h2" variant="h6">{page.title}</Typography>
-          <Chip icon={<InfoIcon />} label={page.update} />
-          <Chip icon={<UpdateIcon />} label={page.create} />
+          <Typography component="h2" variant="h6">{post.title}</Typography>
+          <Chip icon={<InfoIcon />} label={post.update as string} />
+          <Chip icon={<UpdateIcon />} label={post.create as string} />
           {
-            page.tags.map(tag => {
+            post.tags.map(tag => {
               return <Chip icon={<TagIcon />} label={tag} key={tag} onClick={() => { router.push("/search?t=" + tag); }} size="small" />
             })
           }
           <Typography variant="body1" paragraph color="gray">
-            {page.context.slice(0, 300)} .......
+            {post.context.slice(0, 300)} .......
           </Typography>
         </CardContent>
       </Card>

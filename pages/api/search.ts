@@ -1,5 +1,6 @@
-import { Page } from "../../lib/global"
-import { connect, get_latest_small, get_favorites_small } from "../../lib/utils/mongo"
+import { Post } from "@/lib/global"
+import connect from '@/lib/mongo_connect'
+import {latest_small, favorites_small } from "@/lib/mongo"
 
 const clamp = (x: number, min: number, max: number) => { return Math.max(Math.min(x, max), min); }
 
@@ -25,22 +26,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   n = clamp(n, 5, 50);
 
   if (req.method !== "GET" && req.method !== "POST") {
-    res.status(500).json({ pages: [], err: "Method not allowed!" })
+    res.status(500).json({ posts: [], err: "Method not allowed!" })
     return;
   }
   await connect();
   if (is_short) {
     n = 7;
-    let pages: Page[] = [];
+    let posts: Post[] = [];
     switch (sort) {
       case "lgtm":
-        pages = await get_favorites_small(page, n);
+        posts = await favorites_small(page, n);
         break;
       case "latest":
       default:
-        pages = await get_latest_small(page, n);
+        posts = await latest_small(page, n);
     }
-    res.status(200).json({ pages, err: {} });
+    res.status(200).json({ posts, err: {} });
     return;
   }
 }

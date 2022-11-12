@@ -1,10 +1,9 @@
 import mongoose from 'mongoose'
 
-const mongo_pagename = "mongo";
-const mongo_pass = "mongoPass";
-const authMechanism = "DEFAULT";
-const dbname = "example"
-const MONGODB_URI = `mongodb://${mongo_pagename}:${mongo_pass}@localhost:27017/${dbname}?authMechanism=${authMechanism}`;
+const MONGO_USER = "mongo";
+const MONGO_PASSWORD = "mongoPass";
+const MONGO_DBNAME = "example"
+const MONGODB_URI = `mongodb://localhost:27017/`;
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -12,31 +11,25 @@ if (!MONGODB_URI) {
   )
 }
 
-let cached = global.mongoose
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
-}
-
 export default async function connect() {
-  if (cached.conn) {
-    return cached.conn
+  if (mongoose.connections[0].readyState) {
+    return;
   }
-
-  if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+  try {
+    await mongoose.connect(MONGODB_URI, {
+      auth: { authSource: "admin" },
+      user: MONGO_USER,
+      pass: MONGO_PASSWORD,
       bufferCommands: false,
-      bufferMaxEntries: 0,
-      useFindAndModify: true,
-      useCreateIndex: true
-    }
-
-    // cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
-    //   return mongoose
-    // })
-    mongoose.connect(MONGODB_URI);
+      dbName: MONGO_DBNAME,
+      // useUnifiedTopology: true,
+      // useFindAndModify: false,
+      // useCreateIndex: true,
+      // useNewUrlParser: true
+    })
+  } catch (e) {
+    console.error("Failed to Connect Mongodb ")
+    console.log(e);
+    process.exit()
   }
-  cached.conn = await cached.promise
-  return cached.conn
 }

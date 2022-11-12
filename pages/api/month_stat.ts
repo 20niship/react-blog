@@ -1,14 +1,24 @@
-import * as mongo from "../../lib/utils/mongo";
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { connect, page_month_stats} from '../../lib/utils/mongo';
+import connect from '../../lib/mongo_connect'
+import { models } from '../../lib/mongo'
 
 type Stat = {
-  month:string,
-  count:number,
+  month: string,
+  count: number,
 }
 
 type Data = {
   stats: Stat[]
+}
+
+const page_month_stats = async () => {
+  const pipeline = [
+    { $match: {} },
+    { $group: { _id: { $dateToString: { date: "$create", format: "%Y-%m" } }, count: { $sum: 1 } } }
+  ];
+  const res = await models.Post.aggregate(pipeline);
+  if (res == undefined) return [];
+  return res.map(x => { return { month: x._id, count: x.count } })
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {

@@ -1,6 +1,6 @@
 import { Db, MongoClient, Collection, Int32 } from "mongodb";
 const NumberInt = Int32;
-import { Page, ViewStatus, User, Usergroup } from "../global"
+import { Post, ViewStatus, User, Usergroup } from "../global"
 
 let cachedClient: MongoClient;
 let cachedDb: Db;
