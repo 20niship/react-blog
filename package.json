@@ -12,7 +12,6 @@
   "dependencies": {
     "@codemirror/lang-markdown": "latest",
     "@codemirror/language-data": "^6.1.0",
-    "@elastic/elasticsearch": "latest",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
