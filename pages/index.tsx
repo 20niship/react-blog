@@ -1,26 +1,27 @@
-import { latest, latest_with_draft } from '../lib/mongo'
-import { GetServerSideProps } from 'next';
-import { Post } from '../lib/global'
-import Typography from '@mui/material/Typography';
-import { Fragment } from 'react'
-import SearchResultList from '../components/SearchResultList'
+import type { NextPage, GetServerSideProps } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import prisma from "../lib/prisma";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // const posts = await latest();
-  const posts = await latest_with_draft();
-  return { props: { posts } }
-}
-
-type Props = {
-  posts: Post[];
-}
-
-export default function Home(props: Props) {
+const Home: NextPage = (props: any) => {
   return (
-    <Fragment>
-      <Typography variant="h4">記事一覧</Typography>
-      <SearchResultList posts={props.posts} page={1} count={10} />
-    </Fragment>
-  )
-}
+    <div className={styles.container}>
+      {props.k}
+    </div>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<{ count: number; }> = async (ctx) => {
+  const users = await prisma.user.findMany();
+  console.log(users)
+  const k = users.map(e => e.username)
+  return {
+    props: {
+      k
+    },
+  };
+};
+
+export default Home;
 

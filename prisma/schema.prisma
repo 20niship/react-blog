@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      =  env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int     @id @default(autoincrement())
+  username      String?
+  gh_username   String?
+  email         String?      @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  sessions      Session[]
+  profile Post?
+}
+
+model Post{
+  id            Int @id @default(autoincrement())
+  title         String 
+  context       String
+  status        Int
+  icon          String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  author        User  @relation(fields: [userid], references: [id]) 
+  userid        Int @unique 
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userid       Int
+  expires      DateTime
+  user         User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  @@index([userid])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
