@@ -30,6 +30,7 @@ model Post{
   updatedAt     DateTime   @updatedAt
   author        User  @relation(fields: [userid], references: [id]) 
   userid        Int @unique 
+  tags          String[]
 }
 
 model Session {
